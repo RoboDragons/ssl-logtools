@@ -54,6 +54,7 @@ private:
     Network* m_index;
     bool m_mayRun;
     int m_currentFrame;
+    bool receive_VT=true;
 };
 
 #endif // PLAYER_H
