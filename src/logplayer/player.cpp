@@ -155,11 +155,11 @@ void Player::sendMessage(const Frame *packet)
     {
         m_vision->writeData(packet->data);
     }
-    else if (m_visionTracker->writeData(packet->data))
+    else if (packet->type == MESSAGE_SSL_VISION_TRACKER_2020)
     {
         if (receive_VT)
         {
-        std::cerr << "MESSAGE_SSL_VISION_TRACKER_2020 Received: " << packet->type << std::endl;    
+        std::cout << "MESSAGE_SSL_VISION_TRACKER_2020 Received" << std::endl;    
         receive_VT=false;
         }
     }
@@ -182,7 +182,7 @@ void Player::run()
     const qint64 startTime = Timer::systemTime();
     const qint64 referenceTime = packets.at(m_currentFrame)->time;
 
-    while (m_mayRun && ++m_currentFrame < packets.size() && m_visionTracker->writeData(packet->data))
+    while (m_mayRun && ++m_currentFrame < packets.size() && this->isRunning())
     {
         Frame *packet = packets.at(m_currentFrame);
 
