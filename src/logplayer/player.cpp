@@ -155,7 +155,7 @@ void Player::sendMessage(const Frame *packet)
     {
         m_vision->writeData(packet->data);
     }
-    else if (packet->type == MESSAGE_SSL_VISION_TRACKER_2020)
+    else if (m_visionTracker->writeData(packet->data))
     {
         if (receive_VT)
         {
@@ -170,8 +170,7 @@ else if (packet->type == MESSAGE_SSL_INDEX_2021)
 
     else
     {
-        std::cout << packet->type <<std::endl;
-        std::cout << "Warning unsupported message type found in log file!" << std::endl;
+        std::cerr << "Warning unsupported message type found in log file: " << packet->type << std::endl;
     }
 }
 

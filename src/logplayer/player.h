@@ -51,7 +51,7 @@ private:
     Network* m_referee;
     Network* m_vision;
     Network* m_legacyVision;
-    Network* m_index;
+    Network* m_visionTracker; 
     bool m_mayRun;
     int m_currentFrame;
     bool receive_VT=true;
