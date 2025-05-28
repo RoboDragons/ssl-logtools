@@ -1,6 +1,5 @@
 project(ssl-logtools)
-
-set(USE_QT5 FALSE CACHE BOOL "Use Qt5 instead of Qt4")
+set(USE_QT5 TRUE CACHE BOOL "Use Qt5 instead of Qt4")
 if(USE_QT5)
 	cmake_minimum_required(VERSION 2.8.9)
 	if(POLICY CMP0020)
@@ -35,7 +34,7 @@ if(USE_QT5)
 		qt5_add_resources(${ARGN})
 	endmacro()
 else()
-	find_package(Qt4 4.6.0 COMPONENTS QtCore QtGui QtNetwork REQUIRED)
+	find_package(Qt4 4.6.0 COMPONENTS QtCore QtWidgets QtNetwork REQUIRED)
 endif()
 
 find_package(Boost 1.42.0 COMPONENTS program_options REQUIRED)
