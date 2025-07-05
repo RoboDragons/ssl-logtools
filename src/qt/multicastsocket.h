@@ -12,13 +12,13 @@
 #ifndef MULTICASTSOCKET_H
 #define MULTICASTSOCKET_H
 
-#include <QNetworkInterface>
-#include <QUdpSocket>
+#include <QtNetwork/QNetworkInterface>
+#include <QtNetwork/QUdpSocket>
 
 class MulticastSocket : public QUdpSocket
 {
 public:
-    explicit MulticastSocket(QObject *parent = 0);
+    explicit MulticastSocket(QObject *parent = nullptr);
 
 public:
     bool joinMulticastGroup(const QHostAddress &groupAddress);

@@ -10,6 +10,9 @@
  ***************************************************************************/
 
 #include "file_format_timestamp_type_size_raw_message.h"
+#include <QtCore/QDataStream> // 修正: QDataStreamのインクルードを追加
+#include <QtCore/QString>     // 修正: QStringのインクルードを追加
+#include <QtCore/QByteArray>  // 修正: QByteArrayのインクルードを追加
 
 FileFormatTimestampTypeSizeRawMessage::FileFormatTimestampTypeSizeRawMessage() :
     FileFormat(1)
@@ -37,7 +40,7 @@ bool FileFormatTimestampTypeSizeRawMessage::readHeaderFromStream(QDataStream& st
     qint32 version;
     stream >> version;
 
-    if (QString(name) == "SSL_LOG_FILE" && version == this->version()) {
+    if (QString(name) == "SSL_LOG_FILE" && version == this->version()) { // 修正: QStringの使用
         return true;
     }
 
@@ -48,7 +51,7 @@ void FileFormatTimestampTypeSizeRawMessage::writeMessageToStream(QDataStream& st
 {
     stream << time;
     stream << (qint32) type;
-    stream << data;
+    stream.writeRawData(data.data(), data.size()); // 修正: QByteArrayのデータを直接書き込む
 }
 
 bool FileFormatTimestampTypeSizeRawMessage::readMessageFromStream(QDataStream& stream, QByteArray& data, qint64& time, MessageType& type)
@@ -57,7 +60,11 @@ bool FileFormatTimestampTypeSizeRawMessage::readMessageFromStream(QDataStream& s
     qint32 typeValue;
     stream >> typeValue;
     type = (MessageType) typeValue;
-    stream >> data;
+
+    qint32 dataSize;
+    stream >> dataSize;
+    data.resize(dataSize);
+    stream.readRawData(data.data(), dataSize); // 修正: QByteArrayのデータを直接読み込む
 
     return true;
 }
