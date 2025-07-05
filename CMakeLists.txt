@@ -44,15 +44,12 @@
 
 # add_subdirectory(src)
 
+
+
 cmake_minimum_required(VERSION 3.28)
 
-project(ssl-logtools LANGUAGES CXX)
+project(ssl-logtools)
 
-include_directories(/usr/include/qt6)
-find_package(Qt6 COMPONENTS Core Widgets Network REQUIRED)
-# find_package(Qt6 COMPONENTS Core REQUIRED)
-find_package(ZLIB REQUIRED)
-find_package(Boost 1.42.0 COMPONENTS program_options REQUIRED)
 if(POLICY CMP0020)
     cmake_policy(SET CMP0020 NEW) # remove if CMake >= 2.8.11 required
 endif()
