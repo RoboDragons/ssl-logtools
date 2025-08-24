@@ -10,6 +10,8 @@
  ***************************************************************************/
 
 #include "file_format_timestamp_type_size_raw_message.h"
+#include <QString>
+#include <QByteArray>
 
 FileFormatTimestampTypeSizeRawMessage::FileFormatTimestampTypeSizeRawMessage() :
     FileFormat(1)
@@ -37,7 +39,7 @@ bool FileFormatTimestampTypeSizeRawMessage::readHeaderFromStream(QDataStream& st
     qint32 version;
     stream >> version;
 
-    if (QString(name) == "SSL_LOG_FILE" && version == this->version()) {
+    if (QString::fromLatin1(name) == QLatin1String("SSL_LOG_FILE") && version == this->version()) {
         return true;
     }
 
@@ -48,7 +50,10 @@ void FileFormatTimestampTypeSizeRawMessage::writeMessageToStream(QDataStream& st
 {
     stream << time;
     stream << (qint32) type;
-    stream << data;
+    stream << static_cast<qint32>(data.size());
+    if (!data.isEmpty()) {
+        stream.writeRawData(data.constData(), data.size());
+    }
 }
 
 bool FileFormatTimestampTypeSizeRawMessage::readMessageFromStream(QDataStream& stream, QByteArray& data, qint64& time, MessageType& type)
@@ -57,7 +62,15 @@ bool FileFormatTimestampTypeSizeRawMessage::readMessageFromStream(QDataStream& s
     qint32 typeValue;
     stream >> typeValue;
     type = (MessageType) typeValue;
-    stream >> data;
-
+    qint32 size = 0;
+    stream >> size;
+    data.clear();
+    if (size > 0) {
+        data.resize(size);
+        int readBytes = stream.readRawData(data.data(), size);
+        if (readBytes != size) {
+            return false;
+        }
+    }
     return true;
 }
