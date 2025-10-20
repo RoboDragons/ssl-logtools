@@ -12,8 +12,6 @@
 #include <QByteArray>
 #include <zlib.h>
 #include "file_format_legacy.h"
-#include <QtCore/QDataStream> // 修正: Qt6用のインクルードパスを追加
-#include <QtCore/QString>     // 修正: QStringのインクルードを追加
 
 FileFormatLegacy::FileFormatLegacy() :
     FileFormat(0)
@@ -28,7 +26,7 @@ FileFormatLegacy::~FileFormatLegacy()
 
 void FileFormatLegacy::writeHeaderToStream(QDataStream& stream)
 {
-    stream << QString("SSL_LOG_FILE"); // 修正: QStringの使用
+    stream << QString("SSL_LOG_FILE");
     stream << version();
 }
 

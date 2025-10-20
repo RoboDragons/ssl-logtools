@@ -13,7 +13,7 @@
 #define FILE_FORMAT_H
 
 #include "message_type.h"
-#include <QtCore/QDataStream> // 修正: Qt6用の正しいインクルードパス
+#include <QDataStream>
 
 class FileFormat
 {
