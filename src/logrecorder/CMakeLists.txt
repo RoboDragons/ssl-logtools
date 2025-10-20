@@ -6,7 +6,6 @@ set(SOURCES
 
 add_executable(logrecorder ${SOURCES})
 target_link_libraries(logrecorder common ${Boost_LIBRARIES})
-target_link_libraries(logrecorder common Qt6::Core Qt6::Network ${PROTOBUF_LIBRARY}) # 修正: Qt6::Networkを追加
 if(USE_Qt6)
 	target_link_libraries(logrecorder Qt6::Core Qt6::Network)
 else()
