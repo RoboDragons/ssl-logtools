@@ -13,7 +13,7 @@
 #include "network.h"
 #include "timer.h"
 #include <QtGlobal>
-#include <QtCore/QVariant>
+
 /*!
  * \class Network
  * \brief UDP multicast receiver and transmitter
@@ -38,7 +38,7 @@ Network::Network(const QHostAddress &groupAddress, quint16 localPort, quint16 ta
     m_groupAddress(groupAddress),
     m_localPort(localPort),
     m_targetPort(targetPort),
-    m_socket(nullptr) // 修正: Qt6ではnullptrを使用
+    m_socket(NULL)
 {
 }
 
@@ -58,12 +58,16 @@ void Network::connect()
     disconnect();
 
     m_socket = new MulticastSocket(this);
-    QObject::connect(m_socket, &QUdpSocket::readyRead, this, &Network::readData); // 修正: SIGNAL/SLOTマクロをモダンな形式に変更
+    QObject::connect(m_socket, SIGNAL(readyRead()), SLOT(readData()));
+#if QT_VERSION >= 0x050000
     m_socket->bind(QHostAddress::AnyIPv4, m_localPort, QUdpSocket::ShareAddress | QUdpSocket::ReuseAddressHint);
+#else
+    m_socket->bind(QHostAddress::Any, m_localPort, QUdpSocket::ShareAddress | QUdpSocket::ReuseAddressHint);
+#endif
     m_socket->joinMulticastGroup(m_groupAddress);
 
     if (m_socket->state() != QAbstractSocket::BoundState) {
-        for (const QNetworkInterface& iface : QNetworkInterface::allInterfaces()) {
+        foreach (const QNetworkInterface& iface, QNetworkInterface::allInterfaces()) {
             m_socket->joinMulticastGroup(m_groupAddress, iface);
         }
     }
@@ -77,7 +81,7 @@ void Network::connect()
 void Network::disconnect()
 {
     delete m_socket;
-    m_socket = nullptr; // 修正: Qt6ではnullptrを使用
+    m_socket = NULL;
 }
 
 /*!

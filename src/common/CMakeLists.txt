@@ -23,8 +23,8 @@ set(MOC_SOURCES
     network.h
 )
 
-# qt4_wrap_cpp(MOC_SOURCES ${MOC_SOURCES})
-target_link_libraries(qt Qt6::Core Qt6::Widgets)
+qt4_wrap_cpp(MOC_SOURCES ${MOC_SOURCES})
+
 add_library(common ${SOURCES} ${MOC_SOURCES})
 target_link_libraries(common protobuf qt)
 if(USE_Qt6)
